@@ -141,4 +141,11 @@ def print_stats(stats, stop_event):
                 daemon=True
             )
             client_thread.start()
+    except KeyboardInterrupt:
+        print("\nShutting down server gracefully...")
+        stop_event.set()
+    finally:
+        if server_socket:
+            server_socket.close()
+        print("Server stopped. Exit code 0.")
 
