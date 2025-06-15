@@ -132,4 +132,13 @@ def print_stats(stats, stop_event):
         stats = Statistics()
         stop_event = threading.Event()
         ...
+        while True:
+            client_socket, addr = server_socket.accept()
+            stats.increment_clients()
+            client_thread = threading.Thread(
+                target=handle_client,
+                args=(client_socket, tuple_space, stats),
+                daemon=True
+            )
+            client_thread.start()
 
