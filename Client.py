@@ -109,3 +109,7 @@ class Statistics:
             response_length = f"{len(response):03d}"
             full_response = f"{response_length}{response}".encode()
             client_socket.sendall(full_response)
+    except Exception as e:
+        print(f"Client error: {e}")
+    finally:
+        client_socket.close()
