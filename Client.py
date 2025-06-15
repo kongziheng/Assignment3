@@ -113,3 +113,9 @@ class Statistics:
         print(f"Client error: {e}")
     finally:
         client_socket.close()
+def print_stats(stats, stop_event):
+    while not stop_event.is_set():
+        time.sleep(10)
+        with stats.lock:
+            print("\n=== Server Statistics ===")
+            ...
