@@ -1,0 +1,19 @@
+class TupleSpace:
+    def __init__(self):
+        self.lock = threading.Lock()
+        self.data = {}
+
+    def read(self, key):
+        with self.lock:
+            return self.data.get(key, None)
+
+    def get(self, key):
+        with self.lock:
+            return self.data.pop(key, None)
+
+    def put(self, key, value):
+        with self.lock:
+            if key in self.data:
+                return False
+            self.data[key] = value
+            return True
