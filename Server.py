@@ -35,3 +35,26 @@ def main():
                 else:
                     print(f"Invalid command: {cmd} in {line}")
                     continue
+                retries = 0
+                while retries < MAX_RETRIES:
+                    try:
+                        with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+                            s.connect((hostname, port))
+                            s.sendall(request.encode('utf-8'))
+
+                            response = receive_full_response(s)
+                            if not response:
+                                print(f"Connection lost while processing {line}, retrying ({retries + 1}/{MAX_RETRIES})...")
+                                retries += 1
+                                time.sleep(RETRY_DELAY)
+                                continue
+
+                            print(f"{line}: {response[4:]}")
+                            break
+                    except Exception as e:
+                        print(f"Client error while processing {line}: {e}, retrying ({retries + 1}/{MAX_RETRIES})...")
+                        retries += 1
+                        time.sleep(RETRY_DELAY)
+
+                if retries == MAX_RETRIES:
+                    print(f"Failed to process {line} after {MAX_RETRIES} retries.")
