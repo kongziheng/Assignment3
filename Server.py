@@ -58,3 +58,18 @@ def main():
 
                 if retries == MAX_RETRIES:
                     print(f"Failed to process {line} after {MAX_RETRIES} retries.")
+def receive_full_response(s):
+    try:
+        len_str = s.recv(3).decode('utf-8')
+        if not len_str:
+            return None
+        total_len = int(len_str)
+        data = len_str
+        while len(data) < total_len:
+            chunk = s.recv(total_len - len(data)).decode('utf-8')
+            if not chunk:
+                break
+            data += chunk
+        return data
+    except:
+        return None
