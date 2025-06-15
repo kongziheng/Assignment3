@@ -61,3 +61,34 @@ class Statistics:
             self.total_key_length -= len(key)
             self.total_value_length -= len(value)
             self.tuple_count -= 1
+            def handle_client(client_socket, tuple_space, stats):
+    try:
+        while True:
+            # 接收头部长度
+            header = b''
+            while len(header) < 3:
+                chunk = client_socket.recv(3 - len(header))
+                if not chunk:
+                    break
+                header += chunk
+            if len(header) != 3:
+                break
+            msg_length = int(header.decode())
+
+            # 接收消息体
+            message_body = b''
+            remaining = msg_length
+            while remaining > 0:
+                chunk = client_socket.recv(remaining)
+                if not chunk:
+                    break
+                message_body += chunk
+                remaining -= len(chunk)
+            if remaining > 0:
+                break
+
+            # 解析指令
+            message_body = message_body.decode()
+            parts = message_body.split(' ', 2)
+            if len(parts) < 2:
+                continue
