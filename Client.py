@@ -119,3 +119,17 @@ def print_stats(stats, stop_event):
         with stats.lock:
             print("\n=== Server Statistics ===")
             ...
+            def main():
+    port = 51234
+    server_socket = None
+    try:
+        server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        server_socket.bind(('', port))
+        server_socket.listen(5)
+        print(f"Server listening on port {port}")
+
+        tuple_space = TupleSpace()
+        stats = Statistics()
+        stop_event = threading.Event()
+        ...
+
