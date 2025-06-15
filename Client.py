@@ -92,3 +92,20 @@ class Statistics:
             parts = message_body.split(' ', 2)
             if len(parts) < 2:
                 continue
+            command = parts[0]
+            key = parts[1] if len(parts) > 1 else ""
+            value = parts[2] if len(parts) > 2 else ""
+
+            response = ""
+            if command == 'P':
+                ...
+            elif command == 'G':
+                ...
+            elif command == 'R':
+                ...
+            else:
+                response = "ERR invalid command"
+
+            response_length = f"{len(response):03d}"
+            full_response = f"{response_length}{response}".encode()
+            client_socket.sendall(full_response)
